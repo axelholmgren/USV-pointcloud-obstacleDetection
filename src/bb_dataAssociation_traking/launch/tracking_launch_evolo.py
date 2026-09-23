@@ -5,13 +5,18 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    use_sim_time = LaunchConfiguration("use_sim_time")
     return LaunchDescription([    
+        DeclareLaunchArgument(
+        "use_sim_time",
+        default_value="false"
+        ),
        
         Node(
             package='bb_dataass_tracking', executable='bounding_box_node_main',
             
             parameters=[{
-                'use_sim_time': True,
+                "use_sim_time": use_sim_time,
                 'fixed_frame': 'evolo/odom',
                 'cloud_in': '/clustered_points',
                 'R_cov': 0.1,
