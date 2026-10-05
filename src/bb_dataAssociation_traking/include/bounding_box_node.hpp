@@ -131,7 +131,7 @@ private:
 
     Eigen::Matrix2f approximateCovarianceFromBoundingBox(float width, float length, float heading);
     CovarianceInfo computeCovarianceInfo(pcl::PointCloud<pcl::PointXYZI>::Ptr cloud);
-    void pupBBMarkerArray(std::string frame_id);
+    void pupBBMarkerArray(std::string frame_id, rclcpp::Time stamp);
 
 
     TimedPrediction getPrediction(objectTracker& object,rclcpp::Time& currentTime);

@@ -301,7 +301,7 @@ void BoundingBoxNode::pointCloudCallback(const sensor_msgs::msg::PointCloud2::Sh
 
     publishNonTrackedPC(msg->header.frame_id,currentTime,inverse_transform_stamped);
     //RCLCPP_INFO( this->get_logger(), "2nd pub done");
-    pupBBMarkerArray(fixed_frame_); //here we publish the intantaneous oriented bounding boxes
+    pupBBMarkerArray(fixed_frame_, currentTime); //here we publish the intantaneous oriented bounding boxes
 
     if(saveTimeMetric_){
         rclcpp::Clock ros_clock(RCL_ROS_TIME);  // Use ROS time (sim time or system time depending on parameter)
@@ -315,7 +315,7 @@ void BoundingBoxNode::pointCloudCallback(const sensor_msgs::msg::PointCloud2::Sh
     //computeMetrics(currentTime);//BAD METRICS
 }
 
-void BoundingBoxNode::pupBBMarkerArray(std::string frame_id){
+void BoundingBoxNode::pupBBMarkerArray(std::string frame_id, rclcpp::Time stamp){
 // Compute bounding boxes for each cluster
     visualization_msgs::msg::MarkerArray marker_array;
     int id = 0;
@@ -323,6 +323,7 @@ void BoundingBoxNode::pupBBMarkerArray(std::string frame_id){
         visualization_msgs::msg::Marker marker;
         marker.id = id++;
         marker.header.frame_id = frame_id ;
+        marker.header.stamp = stamp;
         marker.type = visualization_msgs::msg::Marker::CUBE;
         marker.pose.position.x = object.rectangle.center.x;
         marker.pose.position.y = object.rectangle.center.y;
@@ -342,6 +343,7 @@ void BoundingBoxNode::pupBBMarkerArray(std::string frame_id){
         visualization_msgs::msg::Marker arrow_marker;
         arrow_marker.id = id++;
         arrow_marker.header.frame_id = frame_id;
+        arrow_marker.header.stamp = stamp;
         arrow_marker.type = visualization_msgs::msg::Marker::ARROW;
         arrow_marker.action = visualization_msgs::msg::Marker::ADD;
         arrow_marker.pose.position.x = object.rectangle.center.x;
